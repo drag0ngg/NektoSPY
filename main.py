@@ -6,11 +6,12 @@ import aioconsole
 import logging
 import os
 import json
+from datetime import datetime  # Import datetime module
 from colorama import init, Fore
 
 init(autoreset=True)
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filename='log.txt')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(message)s', filename='log.txt')
 
 TOKEN_FILE = 'tokens.json'
 
@@ -61,9 +62,12 @@ async def on_message(client: Client, notice: Notice) -> None:
         target_client = female_client if client == male_client else male_client
         if hasattr(target_client, "dialog"):
             await target_client.dialog.send_message(message)
+            
+            # Add current time and message prefix
+            current_time = datetime.now().strftime('%H:%M:%S')
             prefix = 'F' if client == male_client else 'M'
             color = Fore.RED if prefix == 'F' else Fore.BLUE
-            print(f"{color}{prefix}: {message}")
+            print(f"{color}{prefix} | {current_time}: {message}")
     else:
         logging.warning(f"Client {client.token} does not have an open dialog")
 
@@ -86,7 +90,10 @@ async def on_close(client: Client, notice: Notice) -> None:
     await female_client.search(my_sex="F", wish_sex="M", wish_age=[[1, 17]], my_age=[1, 17])
 
 async def send_all(message: str) -> None:
-    print(f"YOU: {message}")
+    # Add current time to the message
+    current_time = datetime.now().strftime('%H:%M:%S')
+    print(f"YOU | {current_time}: {message}")
+    
     if hasattr(male_client, "dialog"):
         await male_client.dialog.send_message(message)
     if hasattr(female_client, "dialog"):

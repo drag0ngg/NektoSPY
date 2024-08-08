@@ -2,3 +2,4 @@ python-dotenv
 websockets
 aioconsole
 colorama
+tkinter
