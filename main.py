@@ -1,4 +1,3 @@
-#говнокод писал @migainis и shw3pz @fuxsocy1
 import asyncio
 from nektome.client import Client
 from nektome.dialog import Dialog
@@ -7,6 +6,9 @@ import aioconsole
 import logging
 import os
 import json
+from colorama import init, Fore
+
+init(autoreset=True)
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s', filename='log.txt')
 
@@ -59,7 +61,9 @@ async def on_message(client: Client, notice: Notice) -> None:
         target_client = female_client if client == male_client else male_client
         if hasattr(target_client, "dialog"):
             await target_client.dialog.send_message(message)
-            print(f"{'F' if client == male_client else 'M'}: {message}")
+            prefix = 'F' if client == male_client else 'M'
+            color = Fore.RED if prefix == 'F' else Fore.BLUE
+            print(f"{color}{prefix}: {message}")
     else:
         logging.warning(f"Client {client.token} does not have an open dialog")
 
